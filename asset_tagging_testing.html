@@ -73,16 +73,47 @@
             }
         }
 
+        // Function to load asset information from Firestore
+        async function loadAssetInfo() {
+            const docRef = doc(db, "assets", "assetID12345");
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                document.getElementById("location").value = docSnap.data().location;
+                document.getElementById("remark").value = docSnap.data().remark;
+            } else {
+                document.getElementById("location").value = "";
+                document.getElementById("remark").value = "";
+            }
+        }
+
+        // Function to save asset information to Firestore
+        async function saveAssetInfo() {
+            const location = document.getElementById("location").value;
+            const remark = document.getElementById("remark").value;
+
+            try {
+                await setDoc(doc(db, "assets", "assetID12345"), {
+                    location: location,
+                    remark: remark
+                });
+                alert("Asset information updated successfully.");
+            } catch (error) {
+                alert("Error updating asset information: " + error);
+            }
+        }
+
         // Check if the user is logged in
         function checkLogin() {
             if (!sessionStorage.getItem("loggedIn")) {
                 window.location.href = "login.html";
             } else {
                 loadUsername();
+                loadAssetInfo();
             }
         }
 
-        // Load the username when the page loads
+        // Load the username and asset information when the page loads
         window.onload = checkLogin;
     </script>
 </head>
@@ -100,17 +131,18 @@
             </tr>
             <tr>
                 <th>Description</th>
-                <td>IdeaPad 3 15IIL05</td>
+                <td>High-performance laptop</td>
             </tr>
             <tr>
                 <th>Location</th>
-                <td>Office 12B</td>
+                <td><input type="text" id="location"></td>
             </tr>
             <tr>
                 <th>Remark</th>
-                <td>In good condition</td>
+                <td><input type="text" id="remark"></td>
             </tr>
         </table>
+        <button onclick="saveAssetInfo()">Save Changes</button>
         <div>
             <label for="username">Change Username: </label>
             <input type="text" id="username" name="username">
