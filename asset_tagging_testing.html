@@ -47,16 +47,32 @@
             <input type="text" id="username" name="username">
             <button onclick="changeUsername()">Change</button>
         </div>
-        <p id="currentUsername">Current Username: <span id="displayUsername">DefaultUser</span></p>
+        <p id="currentUsername">Current Username: <span id="displayUsername"></span></p>
     </div>
 
     <script>
+        // Function to change the username and store it in local storage
         function changeUsername() {
             var newUsername = document.getElementById("username").value;
             document.getElementById("displayUsername").textContent = newUsername;
+            localStorage.setItem("username", newUsername);
         }
+
+        // Function to load the username from local storage
+        function loadUsername() {
+            var storedUsername = localStorage.getItem("username");
+            if (storedUsername) {
+                document.getElementById("displayUsername").textContent = storedUsername;
+            } else {
+                document.getElementById("displayUsername").textContent = "DefaultUser";
+            }
+        }
+
+        // Load the username when the page loads
+        window.onload = loadUsername;
     </script>
 </body>
 </html>
+
 
 
