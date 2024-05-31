@@ -13,6 +13,7 @@
         th, td { padding: 10px; text-align: left; }
         .asset-image { text-align: center; margin: 20px 0; }
         .error { color: red; }
+        .current-user { text-align: center; font-size: 24px; font-weight: bold; }
     </style>
     <!-- Firebase SDK -->
     <script type="module">
@@ -105,7 +106,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>Office 12C</td>
+                <td>Office 12B</td>
             </tr>
             <tr>
                 <th>Purchase Date</th>
@@ -116,8 +117,7 @@
                 <td>Quarterly</td>
             </tr>
             <tr>
-                <th>Current User</th>
-                <td><span id="displayUsername"></span></td>
+                <th colspan="2" class="current-user">Current User: <span id="displayUsername"></span></th>
             </tr>
         </table>
         <div>
