@@ -80,7 +80,7 @@
 
         // Function to load asset information from Firestore
         async function loadAssetInfo() {
-            const docRef = doc(db, "assets", "assetID12345");
+            const docRef = doc(db, "settings", "assetID12345");
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
@@ -106,7 +106,7 @@
             const remark = document.getElementById("remark").value;
 
             try {
-                await setDoc(doc(db, "assets", "assetID12345"), {
+                await setDoc(doc(db, "settings", "assetID12345"), {
                     location: location,
                     remark: remark
                 });
