@@ -51,7 +51,6 @@
                     });
                     console.log("Username updated successfully in Firestore");
                     document.getElementById("displayUsername").textContent = newUsername;
-                    document.getElementById("currentUser").textContent = "Current User: " + newUsername;
                     errorElement.textContent = "";
                 } catch (error) {
                     errorElement.textContent = "Error updating username: " + error.message;
@@ -75,14 +74,10 @@
 
                 if (docSnap.exists()) {
                     console.log("Username document exists. Setting username on the page.");
-                    const username = docSnap.data().username;
-                    document.getElementById("displayUsername").textContent = username;
-                    document.getElementById("currentUser").textContent = "Current User: " + username;
+                    document.getElementById("displayUsername").textContent = docSnap.data().username;
                 } else {
                     console.log("Username document does not exist. Setting default username.");
-                    const defaultUsername = "DefaultUser";
-                    document.getElementById("displayUsername").textContent = defaultUsername;
-                    document.getElementById("currentUser").textContent = "Current User: " + defaultUsername;
+                    document.getElementById("displayUsername").textContent = "DefaultUser";
                 }
             } catch (error) {
                 console.error("Error getting username:", error);
@@ -96,7 +91,6 @@
 <body>
     <div class="container">
         <h1>Asset Information</h1>
-        <p id="currentUser" style="text-align: center;"></p> <!-- Display current user here -->
         <div class="asset-image">
             <img src="https://github.com/hadifmori/asset-info/blob/main/ideapad3.jpg?raw=true" alt="Asset Image" style="max-width: 100%; height: auto;">
         </div>
@@ -111,7 +105,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>Office 12B</td>
+                <td>Office 12C</td>
             </tr>
             <tr>
                 <th>Purchase Date</th>
@@ -120,6 +114,10 @@
             <tr>
                 <th>Maintenance Schedule</th>
                 <td>Quarterly</td>
+            </tr>
+            <tr>
+                <th>Current User</th>
+                <td><span id="displayUsername"></span></td>
             </tr>
         </table>
         <div>
@@ -130,12 +128,6 @@
             <button onclick="changeUsername()">Change</button>
             <p id="error" class="error"></p>
         </div>
-        <p>Current Username: <span id="displayUsername"></span></p>
     </div>
 </body>
 </html>
-
-
-
-
-
