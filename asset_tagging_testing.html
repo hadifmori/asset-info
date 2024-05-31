@@ -18,13 +18,9 @@
     <div class="container">
         <h1>Asset Information</h1>
         <div class="asset-image">
-            <img src="https://github.com/hadifmori/asset-info/blob/main/ideapad3.jpg?raw=true" alt="Asset Image" style="max-width: 100%; height: auto;">
+            <img src="https://yourusername.github.io/yourrepositoryname/asset.jpg" alt="Asset Image" style="max-width: 100%; height: auto;">
         </div>
         <table>
-            <tr>
-                <th>User</th>
-                <td>Hadif</td>
-            </tr>
             <tr>
                 <th>Asset ID</th>
                 <td>AssetID12345</td>
@@ -35,7 +31,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>Office 12F</td>
+                <td>Office 12B</td>
             </tr>
             <tr>
                 <th>Purchase Date</th>
@@ -46,7 +42,21 @@
                 <td>Quarterly</td>
             </tr>
         </table>
+        <div>
+            <label for="username">Change Username: </label>
+            <input type="text" id="username" name="username">
+            <button onclick="changeUsername()">Change</button>
+        </div>
+        <p id="currentUsername">Current Username: <span id="displayUsername">DefaultUser</span></p>
     </div>
+
+    <script>
+        function changeUsername() {
+            var newUsername = document.getElementById("username").value;
+            document.getElementById("displayUsername").textContent = newUsername;
+        }
+    </script>
 </body>
 </html>
+
 
