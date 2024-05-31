@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 400px; margin: 0 auto; padding: 20px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; }
+        button { width: 100%; padding: 10px; }
+        .error { color: red; }
+    </style>
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDq2AzURe0BfaRSj-gltspgh5JqgHZSnjY",
+            authDomain: "asset-tagging-testing.firebaseapp.com",
+            projectId: "asset-tagging-testing",
+            storageBucket: "asset-tagging-testing.appspot.com",
+            messagingSenderId: "332441186174",
+            appId: "1:332441186174:web:9fd52a411725f95032cd2f",
+            measurementId: "G-GLDNF2CFKB"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const errorElement = document.getElementById("error");
+
+            try {
+                const docRef = doc(db, "settings", "login");
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const loginData = docSnap.data();
+                    if (username === loginData.username && password === loginData.password) {
+                        sessionStorage.setItem("loggedIn", true);
+                        window.location.href = "index.html";
+                    } else {
+                        errorElement.textContent = "Invalid username or password.";
+                    }
+                } else {
+                    errorElement.textContent = "Login data not found.";
+                }
+            } catch (error) {
+                errorElement.textContent = "Error during login: " + error.message;
+            }
+
+            // Clear the password field after submission
+            document.getElementById("password").value = "";
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="error" class="error"></p>
+    </div>
+</body>
+</html>
