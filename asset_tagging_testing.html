@@ -14,6 +14,68 @@
         .asset-image { text-align: center; margin: 20px 0; }
         .error { color: red; }
     </style>
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDq2AzURe0BfaRSj-gltspgh5JqgHZSnjY",
+            authDomain: "asset-tagging-testing.firebaseapp.com",
+            projectId: "asset-tagging-testing",
+            storageBucket: "asset-tagging-testing.appspot.com",
+            messagingSenderId: "332441186174",
+            appId: "1:332441186174:web:9fd52a411725f95032cd2f",
+            measurementId: "G-GLDNF2CFKB"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Function to change the username and store it in Firestore
+        async function changeUsername() {
+            const newUsername = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const errorElement = document.getElementById("error");
+
+            const correctPassword = "YourSecurePassword"; // Set your secure password here
+
+            if (password === correctPassword) {
+                try {
+                    await setDoc(doc(db, "settings", "username"), {
+                        username: newUsername
+                    });
+                    document.getElementById("displayUsername").textContent = newUsername;
+                    errorElement.textContent = "";
+                } catch (error) {
+                    errorElement.textContent = "Error updating username: " + error;
+                }
+            } else {
+                errorElement.textContent = "Incorrect password. Please try again.";
+            }
+
+            // Clear the password field after submission
+            document.getElementById("password").value = "";
+        }
+
+        // Function to load the username from Firestore
+        async function loadUsername() {
+            const docRef = doc(db, "settings", "username");
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                document.getElementById("displayUsername").textContent = docSnap.data().username;
+            } else {
+                document.getElementById("displayUsername").textContent = "DefaultUser";
+            }
+        }
+
+        // Load the username when the page loads
+        window.onload = loadUsername;
+    </script>
 </head>
 <body>
     <div class="container">
@@ -32,7 +94,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>Office 12B</td>
+                <td>Office 12C</td>
             </tr>
             <tr>
                 <th>Purchase Date</th>
@@ -53,43 +115,9 @@
         </div>
         <p id="currentUsername">Current Username: <span id="displayUsername"></span></p>
     </div>
-
-    <script>
-        const correctPassword = "MMC"; // Set your secure password here
-
-        // Function to change the username and store it in local storage
-        function changeUsername() {
-            var newUsername = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            var errorElement = document.getElementById("error");
-
-            if (password === correctPassword) {
-                document.getElementById("displayUsername").textContent = newUsername;
-                localStorage.setItem("username", newUsername);
-                errorElement.textContent = "";
-            } else {
-                errorElement.textContent = "Incorrect password. Please try again.";
-            }
-
-            // Clear the password field after submission
-            document.getElementById("password").value = "";
-        }
-
-        // Function to load the username from local storage
-        function loadUsername() {
-            var storedUsername = localStorage.getItem("username");
-            if (storedUsername) {
-                document.getElementById("displayUsername").textContent = storedUsername;
-            } else {
-                document.getElementById("displayUsername").textContent = "DefaultUser";
-            }
-        }
-
-        // Load the username when the page loads
-        window.onload = loadUsername;
-    </script>
 </body>
 </html>
+
 
 
 
