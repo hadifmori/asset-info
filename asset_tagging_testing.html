@@ -13,11 +13,10 @@
         th, td { padding: 10px; text-align: left; }
         .asset-image { text-align: center; margin: 20px 0; }
         .error { color: red; }
-        .current-user { text-align: center; font-size: 24px; font-weight: bold; }
     </style>
     <!-- Firebase SDK -->
     <script type="module">
-        // Import Firebase
+        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
@@ -37,7 +36,7 @@
         const db = getFirestore(app);
 
         // Function to change the username and store it in Firestore
-        window.changeUsername = async function() {
+        async function changeUsername() {
             const newUsername = document.getElementById("username").value;
             const password = document.getElementById("password").value;
             const errorElement = document.getElementById("error");
@@ -46,20 +45,16 @@
 
             if (password === correctPassword) {
                 try {
-                    console.log("Password is correct. Updating username...");
                     await setDoc(doc(db, "settings", "username"), {
                         username: newUsername
                     });
-                    console.log("Username updated successfully in Firestore");
                     document.getElementById("displayUsername").textContent = newUsername;
                     errorElement.textContent = "";
                 } catch (error) {
-                    errorElement.textContent = "Error updating username: " + error.message;
-                    console.error("Error updating username:", error);
+                    errorElement.textContent = "Error updating username: " + error;
                 }
             } else {
                 errorElement.textContent = "Incorrect password. Please try again.";
-                console.log("Incorrect password entered.");
             }
 
             // Clear the password field after submission
@@ -67,38 +62,34 @@
         }
 
         // Function to load the username from Firestore
-        window.loadUsername = async function() {
-            try {
-                console.log("Loading username from Firestore...");
-                const docRef = doc(db, "settings", "username");
-                const docSnap = await getDoc(docRef);
+        async function loadUsername() {
+            const docRef = doc(db, "settings", "username");
+            const docSnap = await getDoc(docRef);
 
-                if (docSnap.exists()) {
-                    console.log("Username document exists. Setting username on the page.");
-                    document.getElementById("displayUsername").textContent = docSnap.data().username;
-                } else {
-                    console.log("Username document does not exist. Setting default username.");
-                    document.getElementById("displayUsername").textContent = "DefaultUser";
-                }
-            } catch (error) {
-                console.error("Error getting username:", error);
+            if (docSnap.exists()) {
+                document.getElementById("displayUsername").textContent = docSnap.data().username;
+            } else {
+                document.getElementById("displayUsername").textContent = "DefaultUser";
             }
         }
 
-        // Check if user is logged in
-        window.onload = function() {
+        // Check if the user is logged in
+        function checkLogin() {
             if (!sessionStorage.getItem("loggedIn")) {
                 window.location.href = "login.html";
             } else {
                 loadUsername();
             }
         }
+
+        // Load the username when the page loads
+        window.onload = checkLogin;
     </script>
 </head>
 <body>
     <div class="container">
         <h1>Asset Information</h1>
-        <div class="current-user">Current User: <span id="displayUsername"></span></div>
+        <p id="currentUsername">Current User: <span id="displayUsername"></span></p>
         <div class="asset-image">
             <img src="https://github.com/hadifmori/asset-info/blob/main/ideapad3.jpg?raw=true" alt="Asset Image" style="max-width: 100%; height: auto;">
         </div>
@@ -117,7 +108,7 @@
             </tr>
             <tr>
                 <th>Remark</th>
-                <td>N/A</td>
+                <td>Needs new battery</td>
             </tr>
         </table>
         <div>
