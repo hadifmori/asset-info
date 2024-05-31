@@ -36,7 +36,7 @@
         const db = getFirestore(app);
 
         // Function to change the username and store it in Firestore
-        async function changeUsername() {
+        window.changeUsername = async function() {
             const newUsername = document.getElementById("username").value;
             const password = document.getElementById("password").value;
             const errorElement = document.getElementById("error");
@@ -66,7 +66,7 @@
         }
 
         // Function to load the username from Firestore
-        async function loadUsername() {
+        window.loadUsername = async function() {
             try {
                 console.log("Loading username from Firestore...");
                 const docRef = doc(db, "settings", "username");
@@ -105,7 +105,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>Office 12A</td>
+                <td>Office 12F</td>
             </tr>
             <tr>
                 <th>Purchase Date</th>
@@ -128,6 +128,7 @@
     </div>
 </body>
 </html>
+
 
 
 
