@@ -51,7 +51,8 @@
                     document.getElementById("displayUsername").textContent = newUsername;
                     errorElement.textContent = "";
                 } catch (error) {
-                    errorElement.textContent = "Error updating username: " + error;
+                    errorElement.textContent = "Error updating username: " + error.message;
+                    console.error("Error updating username:", error);
                 }
             } else {
                 errorElement.textContent = "Incorrect password. Please try again.";
@@ -63,13 +64,17 @@
 
         // Function to load the username from Firestore
         async function loadUsername() {
-            const docRef = doc(db, "settings", "username");
-            const docSnap = await getDoc(docRef);
+            try {
+                const docRef = doc(db, "settings", "username");
+                const docSnap = await getDoc(docRef);
 
-            if (docSnap.exists()) {
-                document.getElementById("displayUsername").textContent = docSnap.data().username;
-            } else {
-                document.getElementById("displayUsername").textContent = "DefaultUser";
+                if (docSnap.exists()) {
+                    document.getElementById("displayUsername").textContent = docSnap.data().username;
+                } else {
+                    document.getElementById("displayUsername").textContent = "DefaultUser";
+                }
+            } catch (error) {
+                console.error("Error getting username:", error);
             }
         }
 
@@ -117,6 +122,7 @@
     </div>
 </body>
 </html>
+
 
 
 
