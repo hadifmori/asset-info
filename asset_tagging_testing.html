@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>Office 12A</td>
+                <td>Office 12B</td>
             </tr>
             <tr>
                 <th>Purchase Date</th>
@@ -55,7 +55,7 @@
     </div>
 
     <script>
-        const correctPassword = "Mutiara4092"; // Set your secure password here
+        const correctPassword = "MMC"; // Set your secure password here
 
         // Function to change the username and store it in local storage
         function changeUsername() {
@@ -70,6 +70,9 @@
             } else {
                 errorElement.textContent = "Incorrect password. Please try again.";
             }
+
+            // Clear the password field after submission
+            document.getElementById("password").value = "";
         }
 
         // Function to load the username from local storage
@@ -87,6 +90,7 @@
     </script>
 </body>
 </html>
+
 
 
 
