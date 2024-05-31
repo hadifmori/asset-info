@@ -12,11 +12,9 @@
         .error { color: red; }
     </style>
     <script type="module">
-        // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDq2AzURe0BfaRSj-gltspgh5JqgHZSnjY",
             authDomain: "asset-tagging-testing.firebaseapp.com",
@@ -27,11 +25,9 @@
             measurementId: "G-GLDNF2CFKB"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Function to handle login
         async function handleLogin() {
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
@@ -56,11 +52,9 @@
                 errorElement.textContent = "Error during login: " + error.message;
             }
 
-            // Clear the password field after submission
             document.getElementById("password").value = "";
         }
 
-        // Attach the login function to the global scope
         window.handleLogin = handleLogin;
     </script>
 </head>
