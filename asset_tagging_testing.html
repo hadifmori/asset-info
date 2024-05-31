@@ -45,9 +45,11 @@
 
             if (password === correctPassword) {
                 try {
+                    console.log("Password is correct. Updating username...");
                     await setDoc(doc(db, "settings", "username"), {
                         username: newUsername
                     });
+                    console.log("Username updated successfully in Firestore");
                     document.getElementById("displayUsername").textContent = newUsername;
                     errorElement.textContent = "";
                 } catch (error) {
@@ -56,6 +58,7 @@
                 }
             } else {
                 errorElement.textContent = "Incorrect password. Please try again.";
+                console.log("Incorrect password entered.");
             }
 
             // Clear the password field after submission
@@ -65,12 +68,15 @@
         // Function to load the username from Firestore
         async function loadUsername() {
             try {
+                console.log("Loading username from Firestore...");
                 const docRef = doc(db, "settings", "username");
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
+                    console.log("Username document exists. Setting username on the page.");
                     document.getElementById("displayUsername").textContent = docSnap.data().username;
                 } else {
+                    console.log("Username document does not exist. Setting default username.");
                     document.getElementById("displayUsername").textContent = "DefaultUser";
                 }
             } catch (error) {
@@ -99,7 +105,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>Office 12B</td>
+                <td>Office 12A</td>
             </tr>
             <tr>
                 <th>Purchase Date</th>
@@ -122,6 +128,7 @@
     </div>
 </body>
 </html>
+
 
 
 
