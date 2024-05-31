@@ -31,7 +31,8 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function login() {
+        // Function to handle login
+        async function handleLogin() {
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
             const errorElement = document.getElementById("error");
@@ -58,6 +59,9 @@
             // Clear the password field after submission
             document.getElementById("password").value = "";
         }
+
+        // Attach the login function to the global scope
+        window.handleLogin = handleLogin;
     </script>
 </head>
 <body>
@@ -65,7 +69,7 @@
         <h1>Login</h1>
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
-        <button onclick="login()">Login</button>
+        <button onclick="handleLogin()">Login</button>
         <p id="error" class="error"></p>
     </div>
 </body>
