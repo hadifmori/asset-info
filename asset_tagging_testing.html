@@ -7,7 +7,7 @@
     <style>
         body { font-family: Arial, sans-serif; }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        h1, .user-title { text-align: center; font-size: 24px; margin-bottom: 20px; }
+        h1 { text-align: center; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
         table, th, td { border: 1px solid #ccc; }
         th, td { padding: 10px; text-align: left; }
@@ -50,14 +50,11 @@
                     });
                     document.getElementById("displayUsername").textContent = newUsername;
                     errorElement.textContent = "";
-                    console.log("Username updated successfully");
                 } catch (error) {
                     errorElement.textContent = "Error updating username: " + error;
-                    console.error("Error updating username: ", error);
                 }
             } else {
                 errorElement.textContent = "Incorrect password. Please try again.";
-                console.log("Incorrect password");
             }
 
             // Clear the password field after submission
@@ -71,16 +68,14 @@
 
             if (docSnap.exists()) {
                 document.getElementById("displayUsername").textContent = docSnap.data().username;
-                console.log("Username loaded: ", docSnap.data().username);
             } else {
                 document.getElementById("displayUsername").textContent = "DefaultUser";
-                console.log("No username found, default used");
             }
         }
 
-        // Function to load asset information from Firestore
+        // Function to load the asset info from Firestore
         async function loadAssetInfo() {
-            const docRef = doc(db, "settings", "assetID12345");
+            const docRef = doc(db, "assets", "assetID12345");
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
@@ -100,21 +95,20 @@
             }
         }
 
-        // Function to save asset information to Firestore
+        // Function to save the asset info to Firestore
         async function saveAssetInfo() {
             const location = document.getElementById("location").value;
             const remark = document.getElementById("remark").value;
+            const errorElement = document.getElementById("error");
 
             try {
-                await setDoc(doc(db, "settings", "assetID12345"), {
+                await setDoc(doc(db, "assets", "assetID12345"), {
                     location: location,
                     remark: remark
-                });
-                alert("Asset information updated successfully.");
-                console.log("Asset information updated: ", { location, remark });
+                }, { merge: true });
+                errorElement.textContent = "Asset information saved successfully.";
             } catch (error) {
-                alert("Error updating asset information: " + error);
-                console.error("Error updating asset information: ", error);
+                errorElement.textContent = "Error saving asset information: " + error;
             }
         }
 
@@ -128,14 +122,14 @@
             }
         }
 
-        // Load the username and asset information when the page loads
+        // Load the username and asset info when the page loads
         window.onload = checkLogin;
     </script>
 </head>
 <body>
     <div class="container">
         <h1>Asset Information</h1>
-        <p id="currentUsername" class="user-title">Current User: <span id="displayUsername"></span></p>
+        <h2 id="currentUsername">Current User: <span id="displayUsername"></span></h2>
         <div class="asset-image">
             <img src="https://github.com/hadifmori/asset-info/blob/main/ideapad3.jpg?raw=true" alt="Asset Image" style="max-width: 100%; height: auto;">
         </div>
@@ -157,7 +151,6 @@
                 <td><input type="text" id="remark"></td>
             </tr>
         </table>
-        <button onclick="saveAssetInfo()">Save Changes</button>
         <div>
             <label for="username">Change Username: </label>
             <input type="text" id="username" name="username">
@@ -165,6 +158,9 @@
             <input type="password" id="password" name="password">
             <button onclick="changeUsername()">Change</button>
             <p id="error" class="error"></p>
+        </div>
+        <div>
+            <button onclick="saveAssetInfo()">Save Asset Info</button>
         </div>
     </div>
 </body>
