@@ -12,6 +12,7 @@
         table, th, td { border: 1px solid #ccc; }
         th, td { padding: 10px; text-align: left; }
         .asset-image { text-align: center; margin: 20px 0; }
+        .error { color: red; }
     </style>
 </head>
 <body>
@@ -31,7 +32,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>Office 12F</td>
+                <td>Office 12A</td>
             </tr>
             <tr>
                 <th>Purchase Date</th>
@@ -45,17 +46,30 @@
         <div>
             <label for="username">Change Username: </label>
             <input type="text" id="username" name="username">
+            <label for="password">Password: </label>
+            <input type="password" id="password" name="password">
             <button onclick="changeUsername()">Change</button>
+            <p id="error" class="error"></p>
         </div>
         <p id="currentUsername">Current Username: <span id="displayUsername"></span></p>
     </div>
 
     <script>
+        const correctPassword = "Mutiara4092"; // Set your secure password here
+
         // Function to change the username and store it in local storage
         function changeUsername() {
             var newUsername = document.getElementById("username").value;
-            document.getElementById("displayUsername").textContent = newUsername;
-            localStorage.setItem("username", newUsername);
+            var password = document.getElementById("password").value;
+            var errorElement = document.getElementById("error");
+
+            if (password === correctPassword) {
+                document.getElementById("displayUsername").textContent = newUsername;
+                localStorage.setItem("username", newUsername);
+                errorElement.textContent = "";
+            } else {
+                errorElement.textContent = "Incorrect password. Please try again.";
+            }
         }
 
         // Function to load the username from local storage
@@ -73,6 +87,7 @@
     </script>
 </body>
 </html>
+
 
 
 
