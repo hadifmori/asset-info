@@ -7,7 +7,7 @@
     <style>
         body { font-family: Arial, sans-serif; }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        h1, #currentUsername { text-align: center; font-size: 24px; margin-bottom: 20px; }
+        h1, .user-title { text-align: center; font-size: 24px; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
         table, th, td { border: 1px solid #ccc; }
         th, td { padding: 10px; text-align: left; }
@@ -50,11 +50,14 @@
                     });
                     document.getElementById("displayUsername").textContent = newUsername;
                     errorElement.textContent = "";
+                    console.log("Username updated successfully");
                 } catch (error) {
                     errorElement.textContent = "Error updating username: " + error;
+                    console.error("Error updating username: ", error);
                 }
             } else {
                 errorElement.textContent = "Incorrect password. Please try again.";
+                console.log("Incorrect password");
             }
 
             // Clear the password field after submission
@@ -68,8 +71,10 @@
 
             if (docSnap.exists()) {
                 document.getElementById("displayUsername").textContent = docSnap.data().username;
+                console.log("Username loaded: ", docSnap.data().username);
             } else {
                 document.getElementById("displayUsername").textContent = "DefaultUser";
+                console.log("No username found, default used");
             }
         }
 
@@ -79,11 +84,19 @@
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
-                document.getElementById("location").value = docSnap.data().location;
-                document.getElementById("remark").value = docSnap.data().remark;
+                const data = docSnap.data();
+                document.getElementById("location").value = data.location || "";
+                document.getElementById("remark").value = data.remark || "";
+                console.log("Asset information loaded: ", data);
             } else {
+                // If the document does not exist, create it with default values
+                await setDoc(docRef, {
+                    location: "",
+                    remark: ""
+                });
                 document.getElementById("location").value = "";
                 document.getElementById("remark").value = "";
+                console.log("No asset information found, created new with default values");
             }
         }
 
@@ -98,8 +111,10 @@
                     remark: remark
                 });
                 alert("Asset information updated successfully.");
+                console.log("Asset information updated: ", { location, remark });
             } catch (error) {
                 alert("Error updating asset information: " + error);
+                console.error("Error updating asset information: ", error);
             }
         }
 
@@ -120,7 +135,7 @@
 <body>
     <div class="container">
         <h1>Asset Information</h1>
-        <p id="currentUsername">Current User: <span id="displayUsername"></span></p>
+        <p id="currentUsername" class="user-title">Current User: <span id="displayUsername"></span></p>
         <div class="asset-image">
             <img src="https://github.com/hadifmori/asset-info/blob/main/ideapad3.jpg?raw=true" alt="Asset Image" style="max-width: 100%; height: auto;">
         </div>
