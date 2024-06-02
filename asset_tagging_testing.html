@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asset Information</title>
     <style>
-        body { font-family: Arial, sans-serif; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         h1, h2 { text-align: center; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
@@ -15,6 +15,24 @@
         .error { color: red; }
         .form-group { margin-bottom: 20px; }
         .save-button { text-align: center; margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 10px; box-sizing: border-box; }
+
+        @media (max-width: 600px) {
+            table, th, td { display: block; width: 100%; }
+            th { display: none; }
+            td { border: none; padding: 10px 0; position: relative; padding-left: 50%; }
+            td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: calc(50% - 20px);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .asset-image img { width: 100%; height: auto; }
+        }
     </style>
     <!-- Firebase SDK -->
     <script type="module">
@@ -142,19 +160,19 @@
         <table>
             <tr>
                 <th>Asset ID</th>
-                <td>AssetID12345</td>
+                <td data-label="Asset ID">AssetID12345</td>
             </tr>
             <tr>
                 <th>Description</th>
-                <td>High-performance laptop</td>
+                <td data-label="Description">High-performance laptop</td>
             </tr>
             <tr>
                 <th>Location</th>
-                <td><input type="text" id="location"></td>
+                <td data-label="Location"><input type="text" id="location"></td>
             </tr>
             <tr>
                 <th>Remark</th>
-                <td><input type="text" id="remark"></td>
+                <td data-label="Remark"><input type="text" id="remark"></td>
             </tr>
         </table>
         <div class="save-button">
@@ -165,7 +183,7 @@
             <input type="text" id="username" name="username">
         </div>
         <div class="form-group">
-            <label for="password">Password:         </label>
+            <label for="password">Password: </label>
             <input type="password" id="password" name="password">
         </div>
         <div class="form-group">
