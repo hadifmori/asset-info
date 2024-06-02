@@ -21,7 +21,7 @@
         @media (max-width: 600px) {
             table, th, td { display: block; width: 100%; }
             th { display: none; }
-            td { border: none; padding: 10px 0; position: relative; padding-left: 50%; }
+            td { border: 1px solid #ccc; padding: 10px 0; position: relative; padding-left: 50%; }
             td:before {
                 content: attr(data-label);
                 position: absolute;
@@ -30,6 +30,7 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                font-weight: bold;
             }
             .asset-image img { width: 100%; height: auto; }
         }
