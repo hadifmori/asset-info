@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asset Information</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         h1, h2 { text-align: center; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
@@ -13,19 +13,18 @@
         th, td { padding: 10px; text-align: left; }
         .asset-image { text-align: center; margin: 20px 0; }
         .error { color: red; }
-        .form-group { margin-bottom: 20px; }
-        .save-button { text-align: center; margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 5px; }
-        .form-group input { width: 100%; padding: 10px; box-sizing: border-box; }
-        .center-button { text-align: center; }
+        @media (max-width: 600px) {
+            .container { padding: 10px; }
+            table, th, td { font-size: 14px; }
+            .asset-image img { max-width: 100%; height: auto; }
+            input, button { width: 100%; margin-top: 10px; }
+        }
     </style>
     <!-- Firebase SDK -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDq2AzURe0BfaRSj-gltspgh5JqgHZSnjY",
             authDomain: "asset-tagging-testing.firebaseapp.com",
@@ -36,11 +35,9 @@
             measurementId: "G-GLDNF2CFKB"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Function to change the username and store it in Firestore
         async function changeUsername() {
             const newUsername = document.getElementById("username").value;
             const password = document.getElementById("password").value;
@@ -62,11 +59,9 @@
                 errorElement.textContent = "Incorrect password. Please try again.";
             }
 
-            // Clear the password field after submission
             document.getElementById("password").value = "";
         }
 
-        // Function to load the username from Firestore
         async function loadUsername() {
             const docRef = doc(db, "settings", "username");
             const docSnap = await getDoc(docRef);
@@ -78,36 +73,43 @@
             }
         }
 
-        // Function to load the asset info from Firestore
         async function loadAssetInfo() {
             const docRef = doc(db, "assets", "assetID12345");
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
                 const data = docSnap.data();
+                document.getElementById("assetId").value = data.assetId || "";
+                document.getElementById("description").value = data.description || "";
                 document.getElementById("location").value = data.location || "";
                 document.getElementById("remark").value = data.remark || "";
                 console.log("Asset information loaded: ", data);
             } else {
-                // If the document does not exist, create it with default values
                 await setDoc(docRef, {
+                    assetId: "",
+                    description: "",
                     location: "",
                     remark: ""
                 });
+                document.getElementById("assetId").value = "";
+                document.getElementById("description").value = "";
                 document.getElementById("location").value = "";
                 document.getElementById("remark").value = "";
                 console.log("No asset information found, created new with default values");
             }
         }
 
-        // Function to save the asset info to Firestore
         async function saveAssetInfo() {
+            const assetId = document.getElementById("assetId").value;
+            const description = document.getElementById("description").value;
             const location = document.getElementById("location").value;
             const remark = document.getElementById("remark").value;
             const errorElement = document.getElementById("error");
 
             try {
                 await setDoc(doc(db, "assets", "assetID12345"), {
+                    assetId: assetId,
+                    description: description,
                     location: location,
                     remark: remark
                 }, { merge: true });
@@ -117,7 +119,6 @@
             }
         }
 
-        // Check if the user is logged in
         function checkLogin() {
             if (!sessionStorage.getItem("loggedIn")) {
                 window.location.href = "login.html";
@@ -127,11 +128,9 @@
             }
         }
 
-        // Attach functions to window to ensure they are in global scope
         window.saveAssetInfo = saveAssetInfo;
         window.changeUsername = changeUsername;
 
-        // Load the username and asset info when the page loads
         window.onload = checkLogin;
     </script>
 </head>
@@ -145,11 +144,11 @@
         <table>
             <tr>
                 <th>Asset ID</th>
-                <td>AssetID12345</td>
+                <td><input type="text" id="assetId"></td>
             </tr>
             <tr>
                 <th>Description</th>
-                <td>IdeaPad 3 15IIL05</td>
+                <td><input type="text" id="description"></td>
             </tr>
             <tr>
                 <th>Location</th>
@@ -160,19 +159,15 @@
                 <td><input type="text" id="remark"></td>
             </tr>
         </table>
-        <div class="save-button">
+        <div>
             <button onclick="saveAssetInfo()">Save Asset Info</button>
         </div>
-        <div class="form-group">
+        <div style="margin-top: 20px;">
             <label for="username">Change Username: </label>
             <input type="text" id="username" name="username">
-        </div>
-        <div class="form-group">
-            <label for="password">Password: </label>
+            <label for="password" style="margin-left: 10px;">Password: </label>
             <input type="password" id="password" name="password">
-        </div>
-        <div class="form-group center-button">
-            <button onclick="changeUsername()">Change</button>
+            <button style="display: block; margin: 10px auto;" onclick="changeUsername()">Change</button>
             <p id="error" class="error"></p>
         </div>
     </div>
